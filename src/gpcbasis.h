@@ -21,15 +21,18 @@ public:
   /// \brief Destructor
   virtual ~GPCBasis() {}
   /// \brief Evaluate all basis functions for a given value z.
-  virtual void EvalBasisFunctions(const double &z,
-                                  Array1D<double> &basis_evals) const = 0;
+  virtual void EvalBasisFunctions(const double &z, Array1D<double> &basis_evals)
+      const = 0;
   /// \brief Get number of quadrature nodes.
   int num_nodes() const { return num_nodes_; }
   int order() const { return order_; }
   /// \brief Get quadrature node #i.
-  const double& nodes(int i) { return nodes_(i); }
+  const double& nodes(int i) const { return nodes_(i); }
   /// \brief Get quadrature weight #i.
-  const double& weights(int i) { return weights_(i); }
+  const double& weights(int i) const { return weights_(i); }
+  /// \brief Get basis function j at node node i                                
+  const double& basisfunctionsatnodes(const int i, const int j) const
+                                  { return psi_(i,j); }
 protected: // give derived classes access
   /// \brief Initialize quadrature nodes and weights.
   virtual void InitNodesWeights() = 0;

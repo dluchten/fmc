@@ -82,8 +82,11 @@ TEST_F(LegendreBasisTest, QuadratureRuleIsCorrect) {
 TEST_F(LegendreBasisTest, EvalBasisFunctionsAtNodesIsCorrect) {
   int num_nodes = myleg4->num_nodes();
   int order = myleg4->order();
-  std::vector<double> p(order); // store evalution of basis functions
+  ASSERT_DOUBLE_EQ(4, order);
+  std::vector<double> p(order + 1); // store evalution of basis functions
+
   double z; // store node i in z
+  // Check all nodes i
   for (int i = 0; i < num_nodes; ++i) {
     z = myleg4->nodes(i);
     p[0] = 1.;
@@ -91,8 +94,9 @@ TEST_F(LegendreBasisTest, EvalBasisFunctionsAtNodesIsCorrect) {
     p[2] = 1. / 2. * (3. * z * z - 1.);
     p[3] = 1. / 2. * (5. * pow(z, 3) - 3. * z);
     p[4] = 1. / 8. * (35. * pow(z, 4) - 30. * z * z + 3.);
+    // Check all degrees j
     for (int j = 0; j < order + 1; ++j ) {
-      ASSERT_DOUBLE_EQ(p.at(j), myleg4->psi_(i,j));
+      ASSERT_DOUBLE_EQ(p.at(j), myleg4->basisfunctionsatnodes(i,j));
     }
   }
 }
