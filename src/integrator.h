@@ -4,7 +4,7 @@
 class Integrator {
 public:
   virtual ~Integrator() {}
-  virtual int Step(double t, double *x) = 0;
+  virtual int Step(const double &t, double *x) = 0;
 };
 
 #endif  // INTEGRATOR_H_

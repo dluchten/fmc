@@ -10,7 +10,7 @@ class Heun : public Integrator {
 public:
   Heun(double dt, const VelocityField &velocityfield);
   ~Heun();
-  int Step(double t, double *x);
+  int Step(const double &t, double *x);
 private:
   const int dimen_;                     // dimension of state x
   const double dt_;                     // timestep

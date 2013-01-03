@@ -8,20 +8,27 @@
 #include <cstdio>
 #include <iostream>
 
-LegendreBasis::LegendreBasis(int order)
-  : GPCBasis("Legendre", order)
+
+/// \todo FIX ANNOYING: order_ + 1 ---> num_basis_functions
+LegendreBasis::LegendreBasis(int order, int num_nodes)
+    : OrthoPolyBasis("Legendre", order, num_nodes)
 {
-  /* Using num_nodes = order + 1, we have interpolating polynomial: Stochastic Collocation
-   * through the GLL nodes.
-   * \note number of quadrature might need to be increased
-   * for higher order integrands!
-   * Change unit tests accordingly when num_nodes is changed!
-   * (../test/legendrebasis_test.cc)
-   */
-  num_nodes_ = order_ + 1;
+  assert(num_nodes >= order_ + 2);
   InitNodesWeights();
   EvalBasisFunctionsAtNodes();
   CompBasisFunctionNormsSquared();
+  CompOmegaGP();
+}
+
+LegendreBasis::LegendreBasis(int order)
+  : OrthoPolyBasis("Legendre", order)
+{
+  // Set number of nodes (interpolating polynomial through the GLL nodes).
+  num_nodes_ = order_ + 2;
+  InitNodesWeights();
+  EvalBasisFunctionsAtNodes();
+  CompBasisFunctionNormsSquared();
+  CompOmegaGP();
 }
 
 LegendreBasis::~LegendreBasis()
@@ -101,7 +108,7 @@ void LegendreBasis::InitNodesWeights() {
 }
 
 void LegendreBasis::EvalBasisFunctionsAtNodes() {
-  psi_.Resize(num_nodes_, order_ + 1);
+  psi_.Resize(num_nodes_, order_ + 1, 0.);
   Array1D<double> basis_evals(order_ + 1);
   // Evaluate all basis functions for each node i
   for (int i = 0; i < num_nodes_; ++i) {
@@ -118,21 +125,15 @@ void LegendreBasis::EvalBasisFunctionsAtNodes() {
  * using quadrature.
  */
 void LegendreBasis::CompBasisFunctionNormsSquared() {
-  gamma_.Resize(num_nodes_);
+  gamma_.Resize(order_ + 1);
   double tmp;
   // Compute squared norms for all basis functions i
   for (int i = 0; i < order_ + 1; ++i) {
     // Sum over all nodes
     tmp = 0.;
     for (int j = 0; j < num_nodes_; ++j) {
-      tmp += psi_(j, i);
+      tmp += psi_(j, i) * psi_(j, i) * weights_(j);
     }
     gamma_(i) = tmp;
   }
 }
-
-  
-  
-
-
-

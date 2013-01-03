@@ -3,21 +3,19 @@
 
 /** 
  * \file legendrebasis.h
- * \brief Legendre basis function class (for uniform distribution)
+ * \brief Legendre basis function class
  * \author D. M. Luchtenburg
  *
  * This class describes the implementation of the Legendre basis functions.
- * \note We focus on non-intrusive GPC (stochastic collocation).  
- * Number of quadrature nodes equals: order expansion + 1.
- * \todo Make this more flexible in future 
- * (e.g. higher order integrands)
+ * Includes: basis functions and derivatives, quadrature rule (Gauss-Lobatto)
  */
-#include "gpcbasis.h"
+#include "orthopolybasis.h"
 #include "array1d.h"
 
-class LegendreBasis : public GPCBasis {
+class LegendreBasis : public OrthoPolyBasis {
  public:
   LegendreBasis(int order);
+  LegendreBasis(int order, int num_nodes);
   ~LegendreBasis();
   /// \brief Evaluates all basis functions at z.
   void EvalBasisFunctions(const double &z, Array1D<double> &basis_evals) const;

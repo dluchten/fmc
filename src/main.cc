@@ -1,18 +1,39 @@
-// DML, 2012, Princeton
-
 #include <iostream>
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
-#include "legendrebasis.h"
+#include "orthopolybasis.h"
+#include "gpcexpansion.h"
 
-
-using namespace std;
+/**
+ * \brief Main program
+ *
+ * \todo Maybe change data structures using boost
+ */
 
 int main(int argc, char *argv[]) {
 
-  // Test test basis
-  GPCBasis *mybasis = new LegendreBasis(3);
+  int order = 2, num_dims = 2;
+  GPCExpansion *myexp = new GPCExpansion("Legendre", order, num_dims);
+
+
+  // // Test test basis
+
+
+  // GPCBasis *mybasis = new LegendreBasis(3);
+
+
+  // int num_nodes = mybasis->num_nodes();
+  // int order = mybasis->order();
+  // double z; 
+
+  // std::cout << "num_nodes = " << num_nodes << "\n";
+  // std::cout << "order = " << order << "\n";
+
+
+
+  // z = mybasis->basisfunctionsatnodes(num_nodes-1, order);
+  // cout << "z = " << z;
 
   
   // // Handle input string
@@ -89,6 +110,6 @@ int main(int argc, char *argv[]) {
   //   } 
   //   timer.print();
 
-  delete mybasis;
+  // delete mybasis;
   return 0;
 }

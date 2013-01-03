@@ -61,8 +61,8 @@ class Array1D {
    * If "my_data" is an object of type Array1D, then its array values are
    * my_data(i) = value
    */
-  T& operator()(size_t i) { return data_[i]; }
-  const T& operator()(size_t i) const { return data_[i]; }
+  T& operator()(size_t i) { return data_[i]; } ///< assign
+  const T& operator()(size_t i) const { return data_[i]; } ///< read
 
     // Neat concept: returns reference to data_[i] and 
     // this can directly assigned or read

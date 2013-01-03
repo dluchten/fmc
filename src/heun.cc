@@ -16,7 +16,7 @@ Heun::~Heun() {
   delete [] k2_;
 }
 
-int Heun::Step(double t, double *x) {
+int Heun::Step(const double &t, double *x) {
   // k1 = v(x_j, t_j)
   velocityfield_.Get(t, x, k1_);
   // k2 = v(x_j + dt * k1, t_j + dt)
