@@ -6,10 +6,10 @@
 CXX = g++
 
 # Optimized settings
-# CXXFLAGS = -O4 -funroll-loops -DNDEBUG
+# CXXFLAGS = -std=c++0x -O4 -funroll-loops -DNDEBUG
 
 # Debugging
-CXXFLAGS =  -g -Wall -Wextra -ansi -Woverloaded-virtual
+CXXFLAGS = -std=c++0x -g -Wall -Wextra -ansi -Woverloaded-virtual
 
 lib_dirs = \
 	-L/usr/local/lib
