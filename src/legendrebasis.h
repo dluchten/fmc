@@ -19,6 +19,9 @@ class LegendreBasis : public OrthoPolyBasis {
   ~LegendreBasis();
   /// \brief Evaluates all basis functions at z.
   void EvalBasisFunctions(const double &z, Array1D<double> &basis_evals) const;
+  /// \brief Evaluates all derivatives of basis functions at z.
+  void EvalDerBasisFunctions(const double &z, Array1D<double> &basis_evals) const;
+
  private:
   /*
    * \brief Initialize quadrature nodes and weights 

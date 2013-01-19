@@ -36,8 +36,8 @@ class Array2D {
   /// \brief Destructor
   ~Array2D() { data_.clear(); }
 
-  /* /// \brief Function to clear the memory */
-  /* void Clear() { m_ = 0; n_ = 0; data_.clear(); } */
+  /// \brief Function to clear the memory
+  void Clear() { m_ = 0; n_ = 0; data_.clear(); }
 
   /// \brief Returns size in the 1st-direction
   size_t Length1() const { return m_; }
@@ -64,7 +64,7 @@ class Array2D {
     data_.clear();
     m_ = m;
     n_ = n;
-    data_.resize(m_ *n_, t);
+    data_.resize(m_ * n_, t);
   }
 
   /// \brief Set all values in array to given value
@@ -80,8 +80,8 @@ class Array2D {
    * If "my_data" is an object of type Array2D, then its array values are
    * my_data(i,j) = value_ij.
    */
-  T& operator()(size_t i, const size_t j) { return data_[j + n_ * i]; }
-  const T& operator()(size_t i,size_t j) const { return data_[j + n_ * i]; }
+  T& operator()(size_t i, size_t j) { return data_[j + n_ * i]; }
+  const T& operator()(size_t i, size_t j) const { return data_[j + n_ * i]; }
 
   private:
     size_t m_; ///> Number of elements in 1st-dimension

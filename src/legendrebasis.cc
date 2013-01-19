@@ -13,7 +13,7 @@
 LegendreBasis::LegendreBasis(int order, int num_nodes)
     : OrthoPolyBasis("Legendre", order, num_nodes)
 {
-  assert(num_nodes >= order_ + 2);
+  // assert(num_nodes >= order_ + 2);
   InitNodesWeights();
   EvalBasisFunctionsAtNodes();
   CompBasisFunctionNormsSquared();
@@ -24,7 +24,7 @@ LegendreBasis::LegendreBasis(int order)
   : OrthoPolyBasis("Legendre", order)
 {
   // Set number of nodes (interpolating polynomial through the GLL nodes).
-  num_nodes_ = order_ + 2;
+  num_nodes_ = order_ + 1;
   InitNodesWeights();
   EvalBasisFunctionsAtNodes();
   CompBasisFunctionNormsSquared();
@@ -47,7 +47,7 @@ LegendreBasis::~LegendreBasis()
 void LegendreBasis::EvalBasisFunctions(const double &z,
                                        Array1D<double> &basis_evals) const {
   // Check size
-  assert(basis_evals.Length() == (unsigned)(order_ + 1));
+  assert(basis_evals.Length() == (unsigned)(num_basis_fncts_));
   // Use recursion
   basis_evals(0) = 1.;
   if (order_ > 0) {
@@ -58,6 +58,42 @@ void LegendreBasis::EvalBasisFunctions(const double &z,
     }
   }
 }
+
+/*
+ * \brief Evaluates all derivatives of basis functions at z.
+ *
+ * Use recursion (see also EvalBasisFunctions above)
+ * (1 - x^2) * P'_n(x) = n P_{n-1}(x) - n * x * P_{n}(x), n > 1,
+ */
+void LegendreBasis::EvalDerBasisFunctions(const double &z,
+                                          Array1D<double> &basis_evals) const {
+  // Evaluate all Legendre polynomials at z
+  Array1D<double> basis_evals_orig(num_basis_fncts_);
+  EvalBasisFunctions(z, basis_evals_orig);
+  // Check size
+  assert(basis_evals.Length() == (unsigned)(num_basis_fncts_));  
+  // Compute derivatives
+  basis_evals(0) = 0.;
+  if (order_ > 0) {
+    if (z == -1.) {
+      int sign = 1;
+      for (int i = 1; i < order_ + 1; ++i) {
+        basis_evals(i) = sign * i * (i +  1) / 2.;
+        sign *= -1;
+      }
+    } else if (z == 1.) {
+      for (int i = 1; i < order_ + 1; ++i) {
+        basis_evals(i) = i * (i +  1) / 2.;
+      }
+    } else {
+      for (int i = 1; i < order_ + 1; ++i) {
+        basis_evals(i) = (1. / (1. - z * z)) *
+          (i * basis_evals_orig(i-1) - i * z * basis_evals_orig(i));
+      }
+    }
+  }
+}
+
 
 /*
  * \brief Compute Gauss-Lobatto-Legendre quadrature (nodes, weights)

@@ -4,17 +4,13 @@
 #define HEUN_H_
 
 #include "integrator.h"
-class VelocityField;
 
 class Heun : public Integrator {
 public:
-  Heun(double dt, const VelocityField &velocityfield);
+  Heun(const double dt, const VelocityField &vf);
   ~Heun();
-  int Step(const double &t, double *x);
+  void Step(const double &t, double *x);
 private:
-  const int dimen_;                     // dimension of state x
-  const double dt_;                     // timestep
-  const VelocityField &velocityfield_; 
   double *xtmp_;                          
   double *k1_;
   double *k2_;

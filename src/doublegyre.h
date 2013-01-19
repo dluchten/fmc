@@ -6,21 +6,25 @@
  * \brief DoubleGyre velocity field
  * \author D. M. Luchtenburg
  *
- * Describes the interface of the gPC basis functions.
  */
-#include "model.h"
+#include "velocityfield.h"
+#include <cmath>
 
-class DoubleGyre : public Model {
+const double kPi = acos(-1.);
+
+class DoubleGyre : public VelocityField {
 public:
-  DoubleGyre(double A, double eps, double omega);
+  /// \brief Default constructor
+  DoubleGyre(double A = 0.1, double eps = 0.1, double omega = 2 * kPi / 10.);
+  /// \brief destructor
   ~DoubleGyre();
-  int velocity_field(double t, const double *x, double *vf) const;
+  /// \brief Get velocity field vf(t,x)
+  void Get(double t, const double *x, double *vf) const;
   int dimen() const { return kDimen; }
 private:
   const double A_;                  
   const double eps_;                   
   const double omega_;        
-  static const double kPi; // DOUBLE needs to assigned in cc file!
   static const int kDimen = 2;
 };
 

@@ -1,0 +1,5 @@
+snapshot0001.dat 0.0
+snapshot0002.dat 0.1
+snapshot0003.dat 0.2
+snapshot0004.dat 0.3
+

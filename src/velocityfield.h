@@ -6,7 +6,7 @@ public:
   virtual ~VelocityField() {}
 
   // vf = v(x,t)
-  virtual int Get(double t, const double *x, double *vf) const = 0;
+  virtual void Get(double t, const double *x, double *vf) const = 0;
 
   // number of states (size of x)
   virtual int dimen() const = 0;

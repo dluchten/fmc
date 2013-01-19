@@ -18,6 +18,7 @@ void OrthoPolyBasis::CompOmegaGP() {
   omega_.Resize(num_nodes_, num_basis_fncts_, 0.);
   for (int i = 0; i < num_nodes_; ++i) {
     for (int j = 0; j < num_basis_fncts_; ++j) {
+      // node i, basis function j
       omega_(i,j) = psi_(i,j) * weights_(i) / gamma_(j);
     }
   }

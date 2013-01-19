@@ -32,8 +32,8 @@ class Array1D {
   /// \brief Destructor
   ~Array1D() { data_.clear(); }
 
-  /* /// \brief Function to clear the memory */
-  /* void Clear() { n_ = 0; data_.clear(); } */
+  /// \brief Function to clear the memory
+  void Clear() { n_ = 0; data_.clear(); }
 
   /// \brief Returns length
   size_t Length() const { return n_; }

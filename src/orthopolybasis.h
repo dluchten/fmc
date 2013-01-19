@@ -11,7 +11,7 @@
 #include <string>
 #include "array1d.h"
 #include "array2d.h"
-
+#include <iostream>
 using namespace std;
 
 class OrthoPolyBasis {
@@ -24,12 +24,18 @@ public:
   /// \brief Evaluate all basis functions for a given value z.
   virtual void EvalBasisFunctions(const double &z, Array1D<double> &basis_evals)
       const = 0;
+  /// \brief Evaluates all derivatives of basis functions at z.
+  virtual void EvalDerBasisFunctions(const double &z, 
+                                     Array1D<double> &basis_evals) const = 0;
   /// \brief Get number of quadrature nodes.
   int num_nodes() const { return num_nodes_; }
   /// \brief Get order (maximum degree of basis function)
   int order() const { return order_; }
   /// \brief Get quadrature node #i.
   const double& nodes(int i) const { return nodes_(i); }
+  /// \brief Get all quadrature nodes
+  const Array1D<double>& nodes() const { return nodes_; }
+
   /// \brief Get quadrature weight #i.
   const double& weights(int i) const { return weights_(i); }
   /// \brief Get basis function j at node node i                                

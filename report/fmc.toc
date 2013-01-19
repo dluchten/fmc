@@ -1,0 +1,24 @@
+\contentsline {section}{\numberline {1}Introduction}{2}
+\contentsline {subsection}{\numberline {1.1}Flow map and FTLE field}{2}
+\contentsline {subsection}{\numberline {1.2}Flow map approximation and composition}{3}
+\contentsline {subsection}{\numberline {1.3}Program flow}{3}
+\contentsline {section}{\numberline {2}Installation}{4}
+\contentsline {section}{\numberline {3}User interface and how to run}{4}
+\contentsline {subsection}{\numberline {3.1}Command-line input}{4}
+\contentsline {subsection}{\numberline {3.2}{\tt [snap{\textunderscore }list{\textunderscore }file]}}{4}
+\contentsline {subsection}{\numberline {3.3}Snapshot files}{4}
+\contentsline {subsection}{\numberline {3.4}Visualization options}{5}
+\contentsline {section}{\numberline {4}Program output}{5}
+\contentsline {section}{\numberline {5}Running the example}{5}
+\contentsline {section}{\numberline {6}Program outline}{5}
+\contentsline {section}{\numberline {7}Program elements}{5}
+\contentsline {subsection}{\numberline {7.1}{\tt Interp} class}{6}
+\contentsline {subsubsection}{\numberline {7.1.1}Features}{6}
+\contentsline {subsubsection}{\numberline {7.1.2}{\tt InterpTrilin} child class and suggested extensions}{6}
+\contentsline {subsection}{\numberline {7.2}{\tt VelocityFieldSnap} class}{6}
+\contentsline {subsubsection}{\numberline {7.2.1}Features}{6}
+\contentsline {subsubsection}{\numberline {7.2.2}{\tt VelocityFieldSnap2D} child class}{6}
+\contentsline {section}{\numberline {8}Future plans}{7}
+\contentsline {section}{\numberline {9}Lessons learned and suggestions for future years}{7}
+\contentsline {section}{\numberline {10}Credits}{8}
+\contentsline {section}{\numberline {11}Ackowledgments}{8}

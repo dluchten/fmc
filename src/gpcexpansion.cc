@@ -2,9 +2,10 @@
 #include "legendrebasis.h"
 #include <iostream>
 #include <cstdlib>
+#include <cstdio>
 #include <cassert>
 #include <cmath>
-
+#include "grid2d.h"
 
 
 /**
@@ -26,7 +27,11 @@ GPCExpansion::GPCExpansion(string type, int order, int num_dims,
     std::cout << "Error in GPCExpansion: Invalid choice for type." << endl;
     exit(EXIT_FAILURE);
   }
-  num_nodes_ = pow(num_oned_nodes_, num_dims_);
+  num_oned_basisfncts_ = order_ + 1;
+  num_nodes_ = (int) pow((double)num_oned_nodes_, num_dims_);
+
+  // std::cout << "CHECK - num_nodes_ = " << num_nodes_ << endl;
+  
   nodal_values_.Resize(num_nodes_, 0.);
 
   CompMultiIndicesExp();
@@ -40,6 +45,7 @@ GPCExpansion::GPCExpansion(string type, int order, int num_dims,
   //   case Legendre:
   //     basis_ = new LegendreBasis(order, num_nodes);
   //     break;
+
   //   case Hermite:
   //     std::cout << "Hermite not supported yet." << endl;
   //     exit (EXIT_FAILURE);
@@ -64,33 +70,43 @@ GPCExpansion::GPCExpansion(string type, int order, int num_dims)
     std::cout << "Error in GPCExpansion: Invalid choice for type." << endl;
     exit(EXIT_FAILURE);
   }
+  num_oned_basisfncts_ = order_ + 1;
   num_oned_nodes_ = basis_->num_nodes();
-  num_nodes_ = pow(num_oned_nodes_, num_dims_);
+  num_nodes_ = (int) pow((double)num_oned_nodes_, num_dims_);
+
+  // std::cout << "CHECK - num_nodes_ = " << num_nodes_ << endl;
+  
+
   nodal_values_.Resize(num_nodes_, 0.);
 
   CompMultiIndicesExp();
   CompMultiIndicesNodes();
   InitProjection();
-
-  ///////////////////////
- CompCoeffients();
-  ///////////////////////
 }
 
 
-GPCExpansion::~GPCExpansion()
-{}
+GPCExpansion::~GPCExpansion() {
+  multi_index_exp_.Clear(); 
+  multi_index_nodes_.Clear(); 
+  omega_.Clear(); 
+  nodal_values_.Clear(); 
+  delete basis_;
+  coefficients_.Clear(); 
+}
                                
-
+void GPCExpansion::ComputeDimExp() {
+  int num = 1, den = 1;
+  int m = min(order_, num_dims_);
+  for( int i = 0; i < m; ++i) {
+      num = num * (order_ + num_dims_ - i);
+      den = den * (i + 1);
+  }
+  dim_exp_ = num / den;
+}
 
 void GPCExpansion::CompMultiIndicesExp() {
   // Compute number of expansion coefficients: (order + num_dim) over (order) 
-  int num = 1, den = 1;
-  for (int i = 1; i < order_ + 1; ++i) {
-    num *= num_dims_ + i;
-    den *= i;
-  } 
-  dim_exp_ = num / den;
+  ComputeDimExp();
   // Init multi-index with zeros
   multi_index_exp_.Resize(dim_exp_, num_dims_, 0);
   int index = 0, isum = 0;
@@ -154,14 +170,14 @@ void GPCExpansion::CompMultiIndicesExp() {
   // Check if index equals dimension of expansion
   assert(index + 1 == dim_exp_);
 
- 
+  // std::cout << "Multi-indices" << "\n";
   // std::cout << "dimension of exp. = " << dim_exp_ << "\n";
   // for (int i = 0; i < dim_exp_; ++i) {
-  //   std::cout << i << " ";
-  //       for (int j = 0; j < num_dims_; ++j) {
-  //         std::cout << multi_index_(i,j);
-  //       }
-  //       std::cout << "\n";
+  //   std::cout << i << "   ";
+  //   for (int j = 0; j < num_dims_; ++j) {
+  //     std::cout << multi_index_exp_(i,j) << " ";
+  //   }
+  //   std::cout << "\n";
   // }
 
 }
@@ -192,7 +208,7 @@ void GPCExpansion::CompMultiIndicesNodes() {
   // std::cout << "indices" << "\n";
   // int k = 0;
   // for (int i = 0; i < num_nodes_; ++i) {
-  //   std::cout << k << " ";
+  //   std::cout << "k = " << k << ", ";
   //   k++;
   //   for (int j = 0; j < num_dims_; ++j) {
   //     std::cout << multi_index_nodes_(i,j);
@@ -202,31 +218,34 @@ void GPCExpansion::CompMultiIndicesNodes() {
 
 }
 
+
 void GPCExpansion::set_nodal_value(int index, double value) {
   assert(index <= num_nodes_);
   nodal_values_(index) = value;
 }
-
 
 void GPCExpansion::InitProjection() {
   omega_.Resize(dim_exp_, num_nodes_, 1.);
   int index_node, index_exp;
   for (int i = 0; i < dim_exp_; ++i) {
     for (int k = 0; k < num_nodes_; ++k) {
-      // Loop over all dimensions for expansion index
+      // Loop over all dimensions for expansion and node index
       for (int idim = 0; idim < num_dims_; ++idim) {
         index_exp = multi_index_exp_(i, idim);
-        // Loop over all nodes for node index
-        for (int inode = 0; inode < num_oned_nodes_; ++inode) {
-          index_node = multi_index_nodes_(k, inode);
-          omega_(i,k) *= omega_(i,k) *= basis_->omega(index_node, index_exp);
-        }
+        index_node = multi_index_nodes_(k, idim);
+        
+        // Checks can be commented out
+        assert(index_exp <= order_);
+        assert(index_node <= num_oned_nodes_);
+        // Checks can be commented out
+
+        omega_(i,k) *= basis_->omega(index_node, index_exp);
       }
     }
   }
 }
 
-void GPCExpansion::CompCoeffients() {
+void GPCExpansion::CompCoefficients() {
   coefficients_.Resize(dim_exp_, 0.);
   for (int i = 0; i < dim_exp_; ++i) {
     // summation, discrete Galerkin projection
@@ -235,18 +254,78 @@ void GPCExpansion::CompCoeffients() {
     }
   }
 
-
   // std:: cout << "nodal values" << "\n";
   // for (int k = 0; k < num_nodes_; ++k) {
   //   std::cout << "nodal_values_(" << k << ") = " << nodal_values_(k) << "\n";
   // }
   // std::cout << "\n";
+}
 
-  // std:: cout << "coefficients" << "\n";
-  // for (int i = 0; i < dim_exp_; ++i) {
-  //   std::cout << "coefficients_(" << i << ") = " << coefficients_(i) << "\n";
-  // }
+void GPCExpansion::PrintCoefficients() {
+  std:: cout << "GPCExpansion coefficients" << "\n";
+  for (int i = 0; i < dim_exp_; ++i) {
+    printf("% 6.4f \n", coefficients_(i));
+  }
+}
+
+void GPCExpansion::EvalExpansion(const Array1D<double> &point, double &value) {
+  // Check if length point equals number of dimensions
+  assert(point.Length() == (unsigned)num_dims_);
+  // Evaluate 1D basis functions at point values
+  Array2D<double> basis_evals_alldim(num_oned_basisfncts_, num_dims_, 0.);
+  Array1D<double> basis_evals(num_oned_basisfncts_, 0.);
+  //  phi_i(z1), phi_i(z2), 
+  for (int i = 0; i < num_dims_; ++i) {
+    basis_->EvalBasisFunctions(point(i), basis_evals);
+    // Assign values to array
+    for (int j = 0; j < num_oned_basisfncts_; ++j) {
+      basis_evals_alldim(j, i) =  basis_evals(j);
+    }
+  }
+  // Sum all terms: sum_I coefficients_I * PHI_I(point)
+  value = 0.;
+  for (int i = 0; i < dim_exp_; ++i) {
+    // get basis function PHI_I(Z) = phi_i1(z1) * phi_i2(z2) * .. 
+    double PHI = 1.;
+    for(int idim = 0; idim < num_dims_; ++idim) {
+      // index basis function of dimension idim
+      int basis_index = multi_index_exp_(i, idim);
+      PHI *= basis_evals_alldim(basis_index ,idim);
+    }
+    value += coefficients_(i) * PHI;
+  }
+}
 
 
+void GPCExpansion::EvalDerExpansion(const int idim, const Array1D<double> &point, double &value) {
+  assert(point.Length() == (unsigned)num_dims_);
+  assert(idim < num_dims_);
 
+  // Evaluate 1D basis functions at point values
+  Array2D<double> basis_evals_alldim(num_oned_basisfncts_, num_dims_, 0.);
+  Array1D<double> basis_evals(num_oned_basisfncts_, 0.);
+  //  phi_i(z1), phi_i(z2), d / zi (phi(zi)), ...
+  for (int i = 0; i < num_dims_; ++i) {
+    if( i == idim ) {
+      basis_->EvalDerBasisFunctions(point(i), basis_evals);
+    } else {
+      basis_->EvalBasisFunctions(point(i), basis_evals);
+    }
+    // Assign values to array
+    for (int j = 0; j < num_oned_basisfncts_; ++j) {
+      basis_evals_alldim(j, i) =  basis_evals(j);
+    }
+  }
+  // Sum all terms: sum_I coefficients_I * PHI_I(point)
+  value = 0.;
+  for (int i = 0; i < dim_exp_; ++i) {
+    // get basis function PHI_I(Z) = phi_i1(z1) * phi_i2(z2) * .. 
+    double PHI = 1.;
+    for(int idim = 0; idim < num_dims_; ++idim) {
+      // index basis function of dimension idim
+      int basis_index = multi_index_exp_(i, idim);
+      PHI *= basis_evals_alldim(basis_index ,idim);
+    }
+    value += coefficients_(i) * PHI;
+  }
 }
