@@ -2,7 +2,10 @@ all: run_tests
 
 TEST_FILES= \
 	main.o \
-	legendrebasis_test.o
+	legendrebasis_test.o \
+	gpcexpansion_test.o \
+	interp_trilin_test.o \
+	velocityfield_snap_2d_test.o
 
 include ../config/make.inc
 

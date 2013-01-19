@@ -4,18 +4,26 @@
 # Princeton University
 #
 MAINLIB = libmain.a
-EXECUTABLES = main
+EXECUTABLES = fmc-gyre fmc-snaps
 
 all: $(MAINLIB) $(EXECUTABLES)
 
 include ../config/make.inc
 
 OBJS = \
-	main.o \
+	stopwatch.o \
+	integrator.o \
 	heun.o \
+	runge-kutta.o \
 	doublegyre.o \
-	gpcbasis.o \
-	legendrebasis.o
+	orthopolybasis.o \
+	legendrebasis.o \
+	gpcexpansion.o \
+	grid2d.o \
+	flowmap2d.o \
+	interp.o \
+	interp_trilin.o \
+	velocityfield_snap_2d.o
 
 VPATH = ../src
 
@@ -33,7 +41,10 @@ CXXFLAGS += $(include_dirs)
 $(MAINLIB): $(OBJS)
 	$(AR) $(ARFLAGS) $@ $?
 
-$(EXECUTABLES) : $(OBJS)
+fmc-gyre : $(OBJS) fmc-gyre.o
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+
+fmc-snaps : $(OBJS) fmc-snaps.o
 	$(CXX) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 clean:
@@ -41,6 +52,7 @@ clean:
 	@-$(RM) .depend
 	@-$(RM) *~
 	@-$(RM) $(EXECUTABLES) $(MAINLIB)
+	@-$(RM) *.dat
 
 distclean: clean
 	@-$(RM) $(EXECUTABLES) $(MAINLIB)
