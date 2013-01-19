@@ -6,18 +6,19 @@
 \contentsline {section}{\numberline {3}User interface and how to run}{4}
 \contentsline {subsection}{\numberline {3.1}Command-line input}{4}
 \contentsline {subsection}{\numberline {3.2}{\tt [snap{\textunderscore }list{\textunderscore }file]}}{4}
-\contentsline {subsection}{\numberline {3.3}Snapshot files}{4}
+\contentsline {subsection}{\numberline {3.3}Snapshot files}{5}
 \contentsline {subsection}{\numberline {3.4}Visualization options}{5}
 \contentsline {section}{\numberline {4}Program output}{5}
 \contentsline {section}{\numberline {5}Running the example}{5}
-\contentsline {section}{\numberline {6}Program outline}{5}
-\contentsline {section}{\numberline {7}Program elements}{5}
+\contentsline {section}{\numberline {6}Program outline}{6}
+\contentsline {section}{\numberline {7}Program elements}{6}
 \contentsline {subsection}{\numberline {7.1}{\tt Interp} class}{6}
 \contentsline {subsubsection}{\numberline {7.1.1}Features}{6}
 \contentsline {subsubsection}{\numberline {7.1.2}{\tt InterpTrilin} child class and suggested extensions}{6}
 \contentsline {subsection}{\numberline {7.2}{\tt VelocityFieldSnap} class}{6}
 \contentsline {subsubsection}{\numberline {7.2.1}Features}{6}
-\contentsline {subsubsection}{\numberline {7.2.2}{\tt VelocityFieldSnap2D} child class}{6}
+\contentsline {subsubsection}{\numberline {7.2.2}{\tt VelocityFieldSnap2D} child class}{7}
+\contentsline {subsection}{\numberline {7.3}Other classes (by D.\nobreakspace {}M.\nobreakspace {}Luchtenburg)}{7}
 \contentsline {section}{\numberline {8}Future plans}{7}
 \contentsline {section}{\numberline {9}Lessons learned and suggestions for future years}{7}
 \contentsline {section}{\numberline {10}Credits}{8}

@@ -1,6 +1,7 @@
 (TeX-add-style-hook "fmc"
  (lambda ()
     (LaTeX-add-labels
+     "toc:intro"
      "dynamics"
      "initialcondition"
      "flowmap"

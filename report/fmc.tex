@@ -104,7 +104,7 @@
 
 \tableofcontents
 
-\section{Introduction}
+\section{Introduction}\label{toc:intro}
 We develop a C++ software package that calculates the Finite-Time Lyapunov Exponent (FTLE) field of a 2D velocity field. Computation of the FTLE field requires calculation of the flow map associated with the velocity field. The flow map is efficiently computed in two steps. In the first step, short-time flow maps are approximated by a spectral basis, and in the second step, flow map composition is used to construct the long-time flow map. 
 
 \subsection{Flow map and FTLE field}
@@ -169,14 +169,18 @@ Changing settings for the compilation process -- setting the compiler, allowing 
 \section{User interface and how to run}
 
 \subsection{Command-line input}
+The user has two options:
+\begin{enumerate}
+    \item To compute the FTLE field of an analytically defined double-gyre velocity field, simply type\\
+    {\tt fmc-gyre <integrator> <timestep> <numsteps> <order> <mgrid> <ngrid>},\\
+    where integrator is the timestepper (Heun, or RungeKutta4). In the notation of Section \ref{toc:intro}, timestep is $\Delta t$, numsteps is $N$, order is $N_1 + N_2$ (the maximum order of the short-time flow map expansion). The last two options mgrid, ngrid specify the dimension of the grid for vizualisation in x- and y-direction.
 
-To run, simply type {\tt fmc-gyre} to generate flow maps and FTLE fields for the double-gyre system, where the velocity fields are known analytically.
-
-To run generate the same output using gridded velocity snapshots as input, you must type the following (quantities in brackets are command-line options described below):
+    \item To run generate the same output using gridded velocity snapshots as input, you must type the following (quantities in brackets are command-line options described below):
 
 \begin{verbatim}
 fmc-snaps [snap_list_file] [vis_options]
 \end{verbatim}
+\end{enumerate}
 
 \subsection{{\tt [snap{\textunderscore}list{\textunderscore}file]}}
 
@@ -214,8 +218,9 @@ See the snapshots in the {\tt examples} directory for examples of this formattin
 The visualization options for {\tt fmc-snaps} are the default (leave blank), {\tt snap} to use the resolution of the snapshot file when selecting the resolution of the visualization output, or a pair of integers specifying the number of pixels in the x-direction and the y-direction.
 
 \section{Program output}
+The program output is the FTLE scalar field on the specified visualization grid. For each time step a Tecplot data file will be written in the {\tt build} directory. The naming is as follows: \verb|ftle_???.dat|, where the questions marks indicate the step number,
+e.g.~\verb|flte_010.dat| is the FTLE field for the flow map at time  $10 \Delta t$.
 
-[Dirk: Describe what the output is and how it is formatted]
 
 \section{Running the example}
 
@@ -224,10 +229,9 @@ Sample snapshots are included in the {\tt examples} directory.  To use these to 
 \section{Program outline}
 
 [Dirk, please provide a sketch of your main program ... not sure if my diagram is up to date ... if it is, let me know and I will include it]
+PLEASE PUT YOUR DIAGRAM IN.
 
 \section{Program elements}
-
-[Dirk, please add descriptions of the classes you designed]
 
 \subsection{{\tt Interp} class}
 
@@ -243,6 +247,7 @@ We currently have one interpolator supported: a trilinear interpolator {\tt Inte
 
 \subsection{{\tt VelocityFieldSnap} class}
 
+
 \subsubsection{Features}
 
 This child class of the abstract {\tt VelocityField} class stores the gridded velocities and returns interpolated velocities.  It also provides the user with methods to access the number of loaded snapshots and temporal bounds.
@@ -251,10 +256,11 @@ This child class of the abstract {\tt VelocityField} class stores the gridded ve
 
 The 2D child class for this, {\tt VelocityFieldSnap2D} by default includes a trilinear interpolator and allocates space to store gridded velocities (as a vector of vectors of vectors) and coordinate vectors.  The most useful constructor for this class takes as input a list of files and a time vector.  Thus, file input is mostly at the level of this class.  We provide an alternate constructor that does not set the velocity values upon construction but allow the user to set these later using the {\tt Set} function.  We chose to include this mainly in order to facilitate testing, so that we could test the basic operations of this class and its ability to input files separately.
 
+
+\subsection{Other classes (by D.~M.~Luchtenburg)}
+Documentation on all other classes can be automatically generated using Doxygen. See README files for details.
+
 \section{Future plans}
-
-[Dirk: Add your future plans for the software ... I wrote a few in for the heck of it ... also check that what I wrote below makes sense]
-
 We would eventually like to enable the software to work with 3D velocity fields.  This would require expanding our basis function functionality to three dimensions and adding a 4D (3 space + 1 time) linear interpolator.  If we ever require derivatives of the velocity, we must investigate other interpolation schemes, such as cubic splines, since the derivatives are discontinuous at the grid points under linear interpolation.
 
 Another option might be to have a default image rendering format.  This could be an option during source code compilation, where the user may optionally link to a JPEG library.  This would help tremendously in debugging or simply visualizing the snapshot files to see what they contain, obviating the need to open Tecplot or some other program.
@@ -266,7 +272,6 @@ We have not attempted profiling and tuning studies, due to lack of time.
 \section{Lessons learned and suggestions for future years}
 
 \begin{list}{*}{}
-\item D. M. Luchtenburg: [Dirk: add lessons learned if you want]
 \item B. J. Landrum: For this project, most of my time was devoted to learning C++ (coming from a Fortran/Python background).  Thankfully, the class introduced me to the \emph{gdb} debugger, which helped tremendously when I was trying to find where the program was messing up.  Unfortunately, however, I was often lost when trying to design the interface between the classes I was responsible for designing.  I would often settle on one scheme, which turned out to be impossible for one reason or another, forcing me to try a new scheme and move bits of my code around.  Regardless, I am glad this project forced me to learn the language and the object-oriented approach to programming.  Better to have a rough experience in a class rather than in the real world!  I feel like I didn't get the real \emph{git} experience, and I found myself pushing just to keep a good backup of the code I wrote, working or not.  Part of this is due to only working in a team of two, both of us new to \emph{git}.  Another part is that our software didn't work until the last minute, and \emph{git} is probably more helpful when coding for projects that already work (have version numbers, etc.).  For future years: I would avoid being tempted by the object-oriented framework to design pristine, general classes and just try to get something working right off the bat.  I would also encourage them to design tests for each method in each class as they go along, because it easily tells you where a code is going wrong and reminds you that at least some part of your code is working.
 \end{list}
 

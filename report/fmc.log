@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  19 JAN 2013 07:12
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  19 JAN 2013 09:42
 entering extended mode
  restricted \write18 enabled.
  Source specials enabled.
@@ -233,13 +233,13 @@ File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 {/usr/local/texlive/2012/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 [2] [3] [4] [5] [6] [7] [8] (./fmc.aux) ) 
 Here is how much of TeX's memory you used:
- 2531 strings out of 493488
- 33137 string characters out of 3141326
- 93190 words of memory out of 3000000
- 5791 multiletter control sequences out of 15000+200000
+ 2532 strings out of 493488
+ 33148 string characters out of 3141326
+ 93198 words of memory out of 3000000
+ 5792 multiletter control sequences out of 15000+200000
  14572 words of font info for 56 fonts, out of 3000000 for 9000
  957 hyphenation exceptions out of 8191
- 42i,10n,24p,1603b,197s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 42i,10n,24p,1603b,199s stack positions out of 5000i,500n,10000p,200000b,50000s
 </usr/local/texlive/2012/texmf-dist/fo
 nts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2012/texmf-dist/fon
 ts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2012/texmf-dist/font
@@ -262,7 +262,7 @@ ti12.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmt
 t10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt
 12.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/symbols/
 msbm10.pfb>
-Output written on fmc.pdf (8 pages, 246956 bytes).
+Output written on fmc.pdf (8 pages, 249988 bytes).
 PDF statistics:
  115 PDF objects out of 1000 (max. 8388607)
  83 compressed objects within 1 object stream
