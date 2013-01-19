@@ -4,6 +4,8 @@
 \usepackage{amssymb}
 \usepackage{epstopdf}
 \usepackage{amsmath}
+\usepackage{float}
+\usepackage{caption}
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 \def\mathbi#1{\textbf{\em #1}}
 
@@ -102,9 +104,16 @@
 \begin{document}
 \maketitle
 
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.4]{images/ftle_gyre.png}
+\caption*{Sample output: FTLE field computed for the double gyre}
+\end{figure}
+
 \tableofcontents
 
 \section{Introduction}\label{toc:intro}
+
 We develop a C++ software package that calculates the Finite-Time Lyapunov Exponent (FTLE) field of a 2D velocity field. Computation of the FTLE field requires calculation of the flow map associated with the velocity field. The flow map is efficiently computed in two steps. In the first step, short-time flow maps are approximated by a spectral basis, and in the second step, flow map composition is used to construct the long-time flow map. 
 
 \subsection{Flow map and FTLE field}
@@ -153,6 +162,12 @@ We use \emph{flow map composition} to compute long-time flow maps $\phi_{t_0}^{t
 \end{align}
 
 \subsection{Program flow}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{images/program_flow.pdf}
+\end{figure}
+
 In summary, our program involves the following steps:
 \begin{enumerate}
     \item The approximation of $N$ short time flow maps, see \eqref{flowmap_app}, for a time span $[0, N \Delta t]$. Employing \eqref{dgp}, this requires solution of \eqref{dynamics} where the initial conditions \eqref{initialcondition} are the quadrature points. 
@@ -225,11 +240,6 @@ e.g.~\verb|flte_010.dat| is the FTLE field for the flow map at time  $10 \Delta 
 \section{Running the example}
 
 Sample snapshots are included in the {\tt examples} directory.  To use these to generate flow maps and FTLE fields, {\tt cd} to that directory and add {\tt fmc-snaps} to your path.  Then type {\tt fmc-snaps snaplist.txt snap} to make the program look at the enclosed snapshot files and generate output with the same spatial resolution as in these files.
-
-\section{Program outline}
-
-[Dirk, please provide a sketch of your main program ... not sure if my diagram is up to date ... if it is, let me know and I will include it]
-PLEASE PUT YOUR DIAGRAM IN.
 
 \section{Program elements}
 
